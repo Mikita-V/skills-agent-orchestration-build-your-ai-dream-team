@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Pulse</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-content">
+        <p class="eyebrow">Portfolio operations</p>
+        <h1>Project Pulse</h1>
+        <p class="header-summary">A focused view of active delivery work across the team.</p>
+      </div>
+    </header>
+
+    <main class="dashboard" aria-labelledby="projects-heading">
+      <section class="projects-section" aria-labelledby="projects-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Current work</p>
+            <h2 id="projects-heading">Projects</h2>
+          </div>
+          <p id="project-count" class="project-count">Loading projects</p>
+        </div>
+
+        <p id="status-message" class="status-message" role="status" aria-live="polite">Loading projects...</p>
+        <ul id="projects-list" class="projects-list" aria-busy="true" aria-describedby="status-message"></ul>
+        <button id="retry-button" class="retry-button" type="button" hidden>Retry</button>
+      </section>
+    </main>
+
+    <script>
+      const projectsList = document.querySelector('#projects-list');
+      const statusMessage = document.querySelector('#status-message');
+      const projectCount = document.querySelector('#project-count');
+      const retryButton = document.querySelector('#retry-button');
+
+      const statusLabels = {
+        'on track': { label: 'On track', tone: 'on-track', cue: 'Check' },
+        'at risk': { label: 'At risk', tone: 'at-risk', cue: 'Alert' },
+        'needs review': { label: 'Needs review', tone: 'needs-review', cue: 'Review' }
+      };
+
+      const priorityLabels = {
+        high: { label: 'High priority', tone: 'high', cue: '1' },
+        medium: { label: 'Medium priority', tone: 'medium', cue: '2' },
+        low: { label: 'Low priority', tone: 'low', cue: '3' }
+      };
+
+      function textValue(value, fallback) {
+        return typeof value === 'string' && value.trim() ? value.trim() : fallback;
+      }
+
+      function makeBadge(value, labels, type) {
+        const key = textValue(value, '').toLowerCase();
+        const details = labels[key] || {
+          label: type === 'status' ? 'Status unknown' : 'Priority unknown',
+          tone: 'unknown',
+          cue: '?'
+        };
+        const badge = document.createElement('span');
+        badge.className = `${type}-badge ${type}-${details.tone}`;
+        badge.textContent = `${details.cue}: ${details.label}`;
+        return badge;
+      }
+
+      function contributorSummary(contributors) {
+        if (!Array.isArray(contributors) || contributors.length === 0) {
+          return 'No contributors listed';
+        }
+        const names = contributors.filter((name) => typeof name === 'string' && name.trim());
+        if (names.length === 0) {
+          return 'No contributors listed';
+        }
+        if (names.length === 1) {
+          return names[0];
+        }
+        return `${names[0]} and ${names.length - 1} other${names.length === 2 ? '' : 's'}`;
+      }
+
+      function detailRow(label, content) {
+        const row = document.createElement('div');
+        row.className = 'detail-row';
+        const term = document.createElement('dt');
+        term.textContent = label;
+        const description = document.createElement('dd');
+        if (content instanceof Node) {
+          description.append(content);
+        } else {
+          description.textContent = content;
+        }
+        row.append(term, description);
+        return row;
+      }
+
+      function createProjectCard(project) {
+        const item = document.createElement('li');
+        const card = document.createElement('article');
+        card.className = 'project-card';
+        const heading = document.createElement('h2');
+        heading.textContent = textValue(project && project.name, 'Untitled project');
+        const details = document.createElement('dl');
+        details.className = 'project-details';
+        details.append(
+          detailRow('Owner', textValue(project && project.owner, 'Unassigned')),
+          detailRow('Status', makeBadge(project && project.status, statusLabels, 'status')),
+          detailRow('Priority', makeBadge(project && project.priority, priorityLabels, 'priority')),
+          detailRow('Recent activity', textValue(project && project.recentActivity, 'No recent activity recorded.')),
+          detailRow('Contributors', contributorSummary(project && project.contributors))
+        );
+        card.append(heading, details);
+        item.append(card);
+        return item;
+      }
+
+      function setState(message, count) {
+        statusMessage.textContent = message;
+        projectCount.textContent = count;
+        projectsList.setAttribute('aria-busy', 'false');
+      }
+
+      async function loadProjects() {
+        projectsList.replaceChildren();
+        projectsList.setAttribute('aria-busy', 'true');
+        retryButton.hidden = true;
+        statusMessage.textContent = 'Loading projects...';
+        projectCount.textContent = 'Loading projects';
+
+        try {
+          const response = await fetch('project-data.json', { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`Request failed with ${response.status}`);
+          }
+          const data = await response.json();
+          const projects = Array.isArray(data.projects) ? data.projects : [];
+          if (projects.length === 0) {
+            setState('No active projects to display.', '0 projects');
+            return;
+          }
+          const fragment = document.createDocumentFragment();
+          projects.forEach((project) => fragment.append(createProjectCard(project)));
+          projectsList.append(fragment);
+          const countLabel = `${projects.length} project${projects.length === 1 ? '' : 's'}`;
+          setState(`${countLabel} loaded.`, countLabel);
+        } catch (error) {
+          setState('We could not load project data. Please try again.', 'Projects unavailable');
+          retryButton.hidden = false;
+        }
+      }
+
+      retryButton.addEventListener('click', loadProjects);
+      loadProjects();
+    </script>
+  </body>
+</html>

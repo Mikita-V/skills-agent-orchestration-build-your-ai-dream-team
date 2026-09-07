@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "name": "Northstar Migration",
+      "owner": "Maya Chen",
+      "status": "On track",
+      "priority": "High",
+      "recentActivity": "Data reconciliation completed; production cutover review is scheduled for Thursday.",
+      "contributors": ["Jordan Bell", "Priya Shah", "Leo Martins"]
+    },
+    {
+      "name": "Customer Health Signals",
+      "owner": "Amir Patel",
+      "status": "At risk",
+      "priority": "High",
+      "recentActivity": "The retention model needs another week of event-quality validation before launch.",
+      "contributors": ["Elena Rossi", "Nia Brooks"]
+    },
+    {
+      "name": "Field Operations Mobile",
+      "owner": "Sofia Nguyen",
+      "status": "On track",
+      "priority": "Medium",
+      "recentActivity": "Offline checklist testing passed with the pilot group in three regions.",
+      "contributors": ["Theo Grant", "Rina Das", "Oliver King", "Samira Ali"]
+    },
+    {
+      "name": "Invoice Exception Queue",
+      "owner": "Daniel Ortiz",
+      "status": "Needs review",
+      "priority": "Low",
+      "recentActivity": "Finance shared the final escalation rules and is awaiting stakeholder approval.",
+      "contributors": ["Grace Wilson"]
+    }
+  ]
+}

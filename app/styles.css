@@ -1,0 +1,246 @@
+:root {
+  color-scheme: light;
+  --canvas: #f6f2ea;
+  --surface: #ffffff;
+  --ink: #27302f;
+  --muted: #63706c;
+  --line: #d9d8d1;
+  --teal: #126965;
+  --teal-wash: #e1f0ed;
+  --amber: #9a5a08;
+  --amber-wash: #fff0d3;
+  --red: #a8423c;
+  --red-wash: #f9e1de;
+  --neutral-wash: #eceeea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  color: var(--ink);
+  background: var(--canvas);
+  font-family: ui-rounded, "Avenir Next", "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+button,
+body {
+  font: inherit;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.header-content,
+.dashboard {
+  width: min(100% - 2rem, 1200px);
+  margin: 0 auto;
+}
+
+.header-content {
+  padding: 2.5rem 0 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.3rem;
+  color: var(--teal);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p,
+dl {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.35rem;
+  font-size: 2.5rem;
+  line-height: 1.15;
+}
+
+.header-summary {
+  max-width: 42rem;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.dashboard {
+  padding: 2.25rem 0 3rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-heading h2 {
+  margin-bottom: 0;
+  font-size: 1.35rem;
+}
+
+.project-count,
+.status-message {
+  color: var(--muted);
+}
+
+.project-count {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.status-message {
+  min-height: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.projects-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-card {
+  height: 100%;
+  padding: 1.25rem;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgb(39 48 47 / 8%);
+}
+
+.project-card h2 {
+  margin-bottom: 1.1rem;
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+
+.project-details {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 0;
+}
+
+.detail-row {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.detail-row dt {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.detail-row dd {
+  margin: 0;
+}
+
+.status-badge,
+.priority-badge {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.status-on-track {
+  color: #075852;
+  background: var(--teal-wash);
+}
+
+.status-at-risk,
+.priority-high {
+  color: #8b322d;
+  background: var(--red-wash);
+}
+
+.status-needs-review,
+.priority-medium {
+  color: #765000;
+  background: var(--amber-wash);
+}
+
+.priority-low,
+.status-unknown,
+.priority-unknown {
+  color: #485451;
+  background: var(--neutral-wash);
+}
+
+.retry-button {
+  margin-top: 0.25rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--teal);
+  border-radius: 6px;
+  color: #ffffff;
+  background: var(--teal);
+  cursor: pointer;
+}
+
+.retry-button:hover {
+  background: #0d5753;
+}
+
+:focus-visible {
+  outline: 3px solid #d17a16;
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .header-content,
+  .dashboard {
+    width: min(100% - 1.25rem, 1200px);
+  }
+
+  .header-content {
+    padding: 1.75rem 0 1.5rem;
+  }
+
+  .section-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .project-count {
+    white-space: normal;
+  }
+
+  .projects-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
